@@ -59,21 +59,43 @@ STEPS:
 Install software needed to run bashscript:
 
 1. $ brew install gatk
-
 2. vcf2tsv through github (https://github.com/sigven/vcf2tsv)
    vcf2tsv dependencies:
-    - python 3
+    - Python 3.7.6
+        $ python3 --version
     - cyvcf2
-    - numpy
-    
-    
- 
-sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev curl
+        $ pip install cyvcf2
+    - numpy (https://scipy.org/install.html)
+        $ conda install -c anaconda numpy
+ 3. snpeff through sourceforge (http://snpeff.sourceforge.net/download.html)
 
 
+*******************************************************************************************
 
+gatk Mutec2 bash script ---- w/o vcf2 and snpeff lines ----
 
+    ***************************************************************************************
 
+#!/bin/bash
+
+for SAMPLE in TWM_17_049
+do
+
+echo 'Performing Mutect2 on' ${SAMPLE}
+
+gatk Mutect2 -I RNA_Exomes_1_27_20/${SAMPLE}_bqsr.bam -R mutation_working_files/human_g1k_v37.fasta -O ${SAMPLE}_mutect.vcf --f1r2-tar-gz ${SAMPLE}_f1r2.tar.gz --max-mnp-distance 0 
+
+gatk LearnReadOrientationModel -I ${SAMPLE}_f1r2.tar.gz -O ${SAMPLE}_read-orientation-model.tar.gz
+
+gatk GetPileupSummaries -I ${SAMPLE}_bqsr.bam -V mutation_working_files/somatic-b37_small_exac_common_3.vcf -L mutation_working_files/somatic-b37_small_exac_common_3.vcf -O ${SAMPLE}_getpileupsummaries.table
+
+gatk CalculateContamination -I ${SAMPLE}_getpileupsummaries.table -O ${SAMPLE}_calculatecontamination.table
+
+gatk FilterMutectCalls -V ${SAMPLE}_mutect.vcf --contamination-table ${SAMPLE}_calculatecontamination.table --ob-priors ${SAMPLE}_read-orientation-model.tar.gz -O ${SAMPLE}_mutect_filtered.vcf -R mutation_working_files/human_g1k_v37.fasta --max-alt-allele-count 1
+
+done
+
+*******************************************************************************************
 
 
 
