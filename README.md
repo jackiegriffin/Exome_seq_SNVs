@@ -1,8 +1,8 @@
 # Exome-mutation-calls
 
-Please analyze exome seq data to identify SNVs, InDels, and CNAs.
+Analyze exome seq data to identify SNVs, InDels, and CNAs.
 
-Todd is most interested in determining:
+Interested in determining:
 1. Genetic variability among the 3 tumors at baseline
 2. Genetic changes observed on Day 90 vs. baseline
 3. Genetic changes observed in estrogen-independent tumors vs. baseline
@@ -70,11 +70,11 @@ Install software needed to run bashscript:
  3. snpeff through sourceforge (http://snpeff.sourceforge.net/download.html)
 
 
-*******************************************************************************************
+***********************************************************************************
 
 gatk Mutec2 bash script ---- w/o vcf2 and snpeff lines ----
 
-    ***************************************************************************************
+************************************************************************************
 
 #!/bin/bash
 
@@ -95,7 +95,57 @@ gatk FilterMutectCalls -V ${SAMPLE}_mutect.vcf --contamination-table ${SAMPLE}_c
 
 done
 
-*******************************************************************************************
+
+************************************************************************************
+--------  >  snpeff and vcf
+
+send following output files to Jason to run:
+
+$$ GET PACKAGES ON MY MACHINE BEFORE JASON LEAVES SO I CAN RUN IN THE FUTURE !!! $$
+
+_mutect_filtered_vcf
+_mutect_filtered_vcf_idx
+
+
+************************************************************************************
+--------  >  R
+
+- 'hgvs_p' column = protein changes. REMOVE ROWS WITH NO PROTEIN CHANGES; cells containing $""$
+- 'filter' column = only keep cells labeled $'PASS'$ [filter = pass keep]
+- remove synonymous variants
+
+Column labels: 
+- AF = mutant allelic frequency
+- DR = read depth
+
+
+***********************************************************************************
+My questions:
+
+What is the tumor burden in each treatment groups?
+characteruze mutation by biological relevance. show nucleotide changes are relevant to other similar tumor related data
+
+look at mutation burden and how they compare to data in simial diseases
+variant allele frequency greater than 40% might be a germline mutation. so lesss thatn 45 % is condisered a somatic mutation. threshold of elow 1% could be noise. 
+
+Bonnie laus threshold to call variant calls was between 0.1% and 10
+
+***
+
+identify driver mutations through germlne mutation (greater than 40$ allelic frequency of mutational brden from exome seq
+vs
+identify passenger genes/genomic instability through somatic mutation (between 0.1-10%)
+
+
+aytologous samples from patients for engraftment into mice for murine models
+
+
+
+
+
+
+
+
 
 
 
