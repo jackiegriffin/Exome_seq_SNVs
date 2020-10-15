@@ -14,10 +14,21 @@ filter_out_synonymous <- function(file_name) {
 # ________________________________________________________________________________________________________________________
 
 # Upload data ----
-variant_calls <- list.files(path="C:/Users/Jgriffin/OneDrive - Dartmouth College/Exome_seq_SNVs/Input_variant_call_files/", 
+variant_calls <- list.files(path="C:/Users/Jgriffin/OneDrive - Dartmouth College/Exome_seq_SNVs/Filtered_variant_files.txt/", 
   pattern = "\\.txt$")                          
-variant_calls <- paste('Input_variant_call_files/', variant_calls, sep = '')
+variant_calls <- paste('Filtered_variant_files/', variant_calls, sep = '')
 variant_calls
+base_049_raw <- read.delim(file = "Filtered_variant_files/twm_17_049_variants_filtered.txt")
+
+base_049_raw <-base_049_raw[(base_049_raw$effect==c("Initiator_codon_variant", 
+                                                    "missense_variant", 
+                                                    "non_coding_transcript_exon_variant",
+                                                    "protein_protein_contact",
+                                                    "start_lost",
+                                                    "start_lost&splice_region_variant",
+                                                    "stop_lost",
+                                                    "stop_lost&splice_region_variant",
+                                                    "structural_interaction_variant")), ] # remove synonymous variants
 
 
 #     1. Run 'filter_out_synonymous' fxn on 'variant_calls' files
@@ -32,7 +43,7 @@ hist(base_49_filt_AF$AF)
 
 base_49_filt_AF <- base_49[(base_49$AF >=0.1 & base_49$AF <=0.96),]
 
-base_49_raw <- read.delim(file = "Input_variant_call_files/twm_17_049_variants_filtered.txt")
+base_49_raw <- read.delim(file = "Filtered_variant_files/twm_17_049_variants_filtered.txt")
 
 base_49 <- filter_out_synonymous(variant_calls[1])
 base_49$hgvs_c <- as.character(base_49$hgvs_c)                                     

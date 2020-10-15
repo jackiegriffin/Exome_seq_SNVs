@@ -1,22 +1,28 @@
-## functions needed in variant processing
+library(dplyr)
+
+#################################################################################
+#                                                                               #
+#    Somatic variants were called using gatk-mutect2-snpeff-vcf2tsv pipeline    #
+#                                                                               #
+#              BASH SCRIPT = 'RNA_Exomes.sh'                                    #
+#              VARIANT PROCESSING = 'mutect_process' function                   #
+#                                                                               #
+#################################################################################
 
 
-twm_17_049 <- read.delim('upload_files/TWM_17_049_mutect_b37_ann.tsv', 
-                         stringsAsFactors = FALSE, 
-                         sep = '\t', 
-                         header = TRUE)
+twm_17_049 <- read.delim('upload_files/TWM_17_049_mutect_b37_ann.tsv',
+                         stringsAsFactors = FALSE, sep = '\t', header = TRUE) # load .ann.tsv files from gatk-mutect2 output
+twm_17_049 <- mutect_process(twm_17_049) # run fxn
+twm_17_049 <-filter(twm_17_049, FILTER == "PASS") # only keep rows with filter column = pass
+twm_17_049 <-twm_17_049[!(twm_17_049$effect=="synonymous_variant"),] # remove synonymous variants
+write.table(twm_17_049, file ="twm_17_049.txt", sep = "\t", row.names = FALSE) # write file to send to todd ---
 
-twm_17_049 <- mutect_process(twm_17_049)
 
-# dont worry about warning, in part your forcing something ot be a nu
 
 ## simple exclusion function ----
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
 ## function for processing mutect calls ----
-
-
-
 mutect_process <- function(mutect_calls, sample_type = 'tumor') {
   
   mutect_info <- mutect_calls$ANN # just the annotation info from snpEff. 'ANN' stands for annotations
@@ -137,12 +143,6 @@ mutect_process <- function(mutect_calls, sample_type = 'tumor') {
 }
 
 write.table(twm_17_049, file ="twm_17_049.txt", sep = "\t", row.names = FALSE)
-
-
-
-
-
-## send above to todd -----------------------------------------------------
 
 
 ## function to draw tile figure ----
