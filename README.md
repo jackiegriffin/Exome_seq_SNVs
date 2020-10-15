@@ -88,36 +88,16 @@ PROCESS VARIANTs - call using 'mutect_process' function in R
 
 CONSIDERATIONS:
 
+- Identify $driver mutations$ by looking at $germline$ mutation > 40% AF of mutational burden
+- Identify $passenger genes$/genomic instability through $somatidc$ mutation, AF between 0.1-10%
+
 - What is the biologic relevance of called variants ?
 - Look at mutation burden and how they compare to data in similar diseases
 - Show nucleotide changes are relevant to other similar tumor related data.
-
-- Variant allele frequency greater than 40% might be a germline mutation. so lesss thatn 45 % is condisered a somatic mutation. threshold of elow 1% could be noise. 
-
-Bonnie laus threshold to call variant calls was between 0.1% and 10
-
-***
-
-identify driver mutations through germlne mutation (greater than 40$ allelic frequency of mutational brden from exome seq
-vs
-identify passenger genes/genomic instability through somatic mutation (between 0.1-10%)
-
-
-aytologous samples from patients for engraftment into mice for murine models
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- <45% variant allele frequency is considered a somatic mutation (>40% =likely germline)
+- < 1% AF is considered noise
+- Set variant allele frequency threshold at 0.01 < x < 0.45 
+- Threshold to call variants seen between 0.1% and 10%
 
 
 

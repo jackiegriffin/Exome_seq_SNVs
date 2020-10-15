@@ -14,11 +14,14 @@ filter_out_synonymous <- function(file_name) {
 # ________________________________________________________________________________________________________________________
 
 # Upload data ----
-variant_calls <- list.files(path="C:/Users/Jgriffin/OneDrive - Dartmouth College/Exome_seq_SNVs/Filtered_variant_files.txt/", 
-  pattern = "\\.txt$")                          
+variant_calls <- list.files(path="Filtered_variant_files/", pattern = "\\.txt$")                          
 variant_calls <- paste('Filtered_variant_files/', variant_calls, sep = '')
 variant_calls
+
 base_049_raw <- read.delim(file = "Filtered_variant_files/twm_17_049_variants_filtered.txt")
+base_049_raw <- base_049_raw[(base_049_raw$AF >=0.1 & base_049_raw$AF <=0.5),]
+
+
 
 base_049_raw <-base_049_raw[(base_049_raw$effect==c("Initiator_codon_variant", 
                                                     "missense_variant", 
@@ -41,7 +44,6 @@ base_049_raw <-base_049_raw[(base_049_raw$effect==c("Initiator_codon_variant",
 # only keep rows with exact 'effect'  name
 hist(base_49_filt_AF$AF)
 
-base_49_filt_AF <- base_49[(base_49$AF >=0.1 & base_49$AF <=0.96),]
 
 base_49_raw <- read.delim(file = "Filtered_variant_files/twm_17_049_variants_filtered.txt")
 
