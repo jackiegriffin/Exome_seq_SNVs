@@ -2,7 +2,7 @@
 
 Analyze exome seq data to identify SNVs, InDels, and CNAs.
 
-Interested in determining:
+Interested in..
 1. Genetic variability among the 3 tumors at baseline
 2. Genetic changes observed on Day 90 vs. baseline
 3. Genetic changes observed in estrogen-independent tumors vs. baseline
@@ -39,7 +39,7 @@ Call variants and indicate:
  
  ***********************************************************************************
 
-I received BWA-MEM aligned bqsr.bam files to call mutations in remaining half os samples:
+I received BWA-MEM aligned bqsr.bam files to call mutations for samples:
 
 TWM-17-049
 TWM-17-050
@@ -72,61 +72,27 @@ Install software needed to run bashscript:
 
 ***********************************************************************************
 
-gatk Mutec2 bash script ---- w/o vcf2 and snpeff lines ----
+RUN gatk-Mutec2 bash script 'RNA_Exomes.sh'
 
 ************************************************************************************
 
-#!/bin/bash
+PROCESS VARIANTs - call using 'mutect_process' function in R
 
-for SAMPLE in TWM_17_049
-do
-
-echo 'Performing Mutect2 on' ${SAMPLE}
-
-gatk Mutect2 -I RNA_Exomes_1_27_20/${SAMPLE}_bqsr.bam -R mutation_working_files/human_g1k_v37.fasta -O ${SAMPLE}_mutect.vcf --f1r2-tar-gz ${SAMPLE}_f1r2.tar.gz --max-mnp-distance 0 
-
-gatk LearnReadOrientationModel -I ${SAMPLE}_f1r2.tar.gz -O ${SAMPLE}_read-orientation-model.tar.gz
-
-gatk GetPileupSummaries -I ${SAMPLE}_bqsr.bam -V mutation_working_files/somatic-b37_small_exac_common_3.vcf -L mutation_working_files/somatic-b37_small_exac_common_3.vcf -O ${SAMPLE}_getpileupsummaries.table
-
-gatk CalculateContamination -I ${SAMPLE}_getpileupsummaries.table -O ${SAMPLE}_calculatecontamination.table
-
-gatk FilterMutectCalls -V ${SAMPLE}_mutect.vcf --contamination-table ${SAMPLE}_calculatecontamination.table --ob-priors ${SAMPLE}_read-orientation-model.tar.gz -O ${SAMPLE}_mutect_filtered.vcf -R mutation_working_files/human_g1k_v37.fasta --max-alt-allele-count 1
-
-done
-
-
-************************************************************************************
---------  >  snpeff and vcf
-
-send following output files to Jason to run:
-
-$$ GET PACKAGES ON MY MACHINE BEFORE JASON LEAVES SO I CAN RUN IN THE FUTURE !!! $$
-
-_mutect_filtered_vcf
-_mutect_filtered_vcf_idx
-
-
-************************************************************************************
---------  >  R
-
-- 'hgvs_p' column = protein changes. REMOVE ROWS WITH NO PROTEIN CHANGES; cells containing $""$
-- 'filter' column = only keep cells labeled $'PASS'$ [filter = pass keep]
-- remove synonymous variants
-
-Column labels: 
-- AF = mutant allelic frequency
-- DR = read depth
-
+    - 'hgvs_p' column = protein changes. REMOVE ROWS WITH NO PROTEIN CHANGES; cells containing $""$
+    - 'filter' column = only keep cells labeled $'PASS'$ [filter = pass keep]
+    - remove synonymous variants
+    - AF = mutant allelic frequency
+    - DR = read depth
 
 ***********************************************************************************
-My questions:
 
-What is the tumor burden in each treatment groups?
-characteruze mutation by biological relevance. show nucleotide changes are relevant to other similar tumor related data
+CONSIDERATIONS:
 
-look at mutation burden and how they compare to data in simial diseases
-variant allele frequency greater than 40% might be a germline mutation. so lesss thatn 45 % is condisered a somatic mutation. threshold of elow 1% could be noise. 
+- What is the biologic relevance of called variants ?
+- Look at mutation burden and how they compare to data in similar diseases
+- Show nucleotide changes are relevant to other similar tumor related data.
+
+- Variant allele frequency greater than 40% might be a germline mutation. so lesss thatn 45 % is condisered a somatic mutation. threshold of elow 1% could be noise. 
 
 Bonnie laus threshold to call variant calls was between 0.1% and 10
 
