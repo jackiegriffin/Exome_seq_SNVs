@@ -5,32 +5,34 @@ library(dplyr)
 library(VennDiagram)
 library(RColorBrewer)
 
+#________________ Functions ______________________________________________________________________________________________
 
-# Functions ----
 filter_out_synonymous <- function(file_name) {
   new_file <- read.delim(file_name, na.strings = "")
   new_file_filt <- na.omit(new_file, cols = "hgvs_p")
 }
+# ________________________________________________________________________________________________________________________
 
 # Upload data ----
-variant_calls <- list.files(path = "C:/Users/jackie/OneDrive - Dartmouth College/Exome-mutation-calls/Input_variant_call_files/", pattern = "\\.txt$")                          # create chr vector of all file names with .txt extension
-variant_calls <- paste('Input_variant_call_files/', variant_calls, sep = '')  # paste folder name (containing .txt files) to reflect PATH from wd
+variant_calls <- list.files(path="C:/Users/Jgriffin/OneDrive - Dartmouth College/Exome_seq_SNVs/Input_variant_call_files/", 
+  pattern = "\\.txt$")                          
+variant_calls <- paste('Input_variant_call_files/', variant_calls, sep = '')
 variant_calls
-
-base_49_no_filter <- read.delim(file="Input_variant_call_files/twm_17_049_variants_filtered.txt")
 
 
 #     1. Run 'filter_out_synonymous' fxn on 'variant_calls' files
 #     2. Convert 'hgvs_c' and 'hgvs_p' to characters vectors
-#     3. Write filtered .csv files
 
 
 # want effects: initiator_codon, missense, noncoding, protein-protein, 
 # start codon loss or gain, stop codon-loss or gain, structural changes. 
 
 # only keep rows with exact 'effect'  name
-hist(base_49$AF)
+hist(base_49_filt_AF$AF)
 
+base_49_filt_AF <- base_49[(base_49$AF >=0.1 & base_49$AF <=0.96),]
+
+base_49_raw <- read.delim(file = "Input_variant_call_files/twm_17_049_variants_filtered.txt")
 
 base_49 <- filter_out_synonymous(variant_calls[1])
 base_49$hgvs_c <- as.character(base_49$hgvs_c)                                     
