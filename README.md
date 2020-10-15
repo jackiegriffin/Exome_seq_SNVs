@@ -1,8 +1,8 @@
 # Exome-mutation-calls
 
-Please analyze exome seq data to identify SNVs, InDels, and CNAs.
+Analyze exome seq data to identify SNVs, InDels, and CNAs.
 
-Todd is most interested in determining:
+Interested in determining:
 1. Genetic variability among the 3 tumors at baseline
 2. Genetic changes observed on Day 90 vs. baseline
 3. Genetic changes observed in estrogen-independent tumors vs. baseline
@@ -70,11 +70,11 @@ Install software needed to run bashscript:
  3. snpeff through sourceforge (http://snpeff.sourceforge.net/download.html)
 
 
-*******************************************************************************************
+***************************************************************************************
 
 gatk Mutec2 bash script ---- w/o vcf2 and snpeff lines ----
 
-    ***************************************************************************************
+***************************************************************************************
 
 #!/bin/bash
 
@@ -95,7 +95,7 @@ gatk FilterMutectCalls -V ${SAMPLE}_mutect.vcf --contamination-table ${SAMPLE}_c
 
 done
 
-*******************************************************************************************
+***************************************************************************************
 
 
 
