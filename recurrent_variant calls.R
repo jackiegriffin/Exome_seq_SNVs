@@ -5,8 +5,8 @@ library(VennDiagram)
 library(RColorBrewer)
 
 # Upload data ----
-variant_calls <- list.files(path = "C:/Users/jackie/OneDrive - Dartmouth College/Exome-mutation-calls/variant_calls/", pattern = "\\.txt$")                          # create chr vector of all file names with .txt extension
-variant_calls <- paste('variant_calls/', variant_calls, sep = '')                  # paste folder name (containing .txt files) to reflect PATH from wd
+variant_calls <- list.files(path = "C:/Users/jackie/OneDrive - Dartmouth College/Exome-mutation-calls/Input_variant_call_files/", pattern = "\\.txt$")                          # create chr vector of all file names with .txt extension
+variant_calls <- paste('Input_variant_call_files/', variant_calls, sep = '')                  # paste folder name (containing .txt files) to reflect PATH from wd
 
 # Write file process function ----
 file_process_fxn <- function(file_name) {
@@ -41,7 +41,7 @@ base_merge_2 = merge(base_merge_1, base_51, all=TRUE)
 base_merge_2$counts <- 1                                                           # add column labeled 'counts'
 base_snv_counts <- aggregate(base_merge_2$counts,list(base_merge_2$hgvs_c),sum)    # aggregate duplicates
 colnames(base_snv_counts) <- c("hgvs_c", "counts")                                 # rename columns
-write.csv(base_snv_counts, file = "Baseline_SNV_counts.csv")                       # write file containing SNV counts
+write.csv(base_snv_counts, file = "Output_files/Baseline_SNV_counts.csv")                       # write file containing SNV counts
 
 recur_merge_1 = merge(recur_293, recur_294, all=TRUE)
 recur_merge_2 = merge(recur_merge_1, recur_346, all=TRUE)
@@ -50,7 +50,7 @@ recur_merge_4 = merge(recur_merge_3, recur_348, all=TRUE)
 recur_merge_4$counts <- 1                                                          # add column labeled 'counts'
 recur_snv_counts <- aggregate(recur_merge_4$counts,list(recur_merge_4$hgvs_c),sum) # aggregate duplicates
 colnames(recur_snv_counts) <- c("hgvs_c", "counts")                                # rename columns
-write.csv(recur_snv_counts, file = "Reccurence_SNV_counts.csv")                    # write file containing SNV counts
+write.csv(recur_snv_counts, file = "Output_files/Reccurence_SNV_counts.csv")                    # write file containing SNV counts
 
 
 # Plot venn diagram ----
@@ -60,7 +60,7 @@ set2<-recur_snv_counts$hgvs_c
 venn.diagram(
   x = list(set1, set2),
   category.names = c("Baseline", "Recurrent"),
-  filename = 'venn_diagram/Venn.tiff',
+  filename = 'output_files/TIFFs/Venn_diagram/Venn.tiff',
   imagetype="tiff" ,
   resolution = 110,
   compression = "lzw",
@@ -74,8 +74,8 @@ venn.diagram(
 
 
 # SNv list unique in reccurrent tumors ----
-SNVs_unique_to_RECCURENT_tumors <- anti_join (recur_snv_counts, base_snv_counts, by='hgvs_c')  
-write.csv(SNVs_unique_to_RECCURENT_tumors, file = "SNVs_unique_to_RECCURENT_tumors.csv")
+unique_SNVs_reccurent <- anti_join (recur_snv_counts, base_snv_counts, by='hgvs_c')  
+write.csv(unique_SNVs_reccurent, file = "Output_files/Unique_SNVs_in_reccurent_tumors.csv")
 
 
 
