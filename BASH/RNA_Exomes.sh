@@ -1,11 +1,11 @@
 #!/bin/bash
 
-for SAMPLE in TWM_17_346
+for SAMPLE in twm_17_049 twm_17_050 twm_17_051 twm_17_293 twm_17_294 twm_17_346 twm_17_347 twm_17_348
 do
 
 echo 'Performing Mutect2 on' ${SAMPLE}
 
-gatk Mutect2 -I RNA_Exomes_1_27_20/${SAMPLE}_bqsr.bam -R mutation_working_files/human_g1k_v37.fasta -O ${SAMPLE}_mutect.vcf --f1r2-tar-gz ${SAMPLE}_f1r2.tar.gz --max-mnp-distance 0 
+gatk Mutect2 -I Exomes_1_27_20/${SAMPLE}_bqsr.bam -R mutation_working_files/human_g1k_v37.fasta -O ${SAMPLE}_mutect.vcf --f1r2-tar-gz ${SAMPLE}_f1r2.tar.gz --max-mnp-distance 0 
 
 gatk LearnReadOrientationModel -I ${SAMPLE}_f1r2.tar.gz -O ${SAMPLE}_read-orientation-model.tar.gz
 
